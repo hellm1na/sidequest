@@ -3,27 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SIDEQUEST. - Photobooth</title>
+    <title>SIDE QUEST - Single Shot Photobooth</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome Icons -->
+    <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts -->
+    <!-- Google Fonts: VT323 & Press Start 2P for Pixel Retro Aesthetics -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Space+Grotesk:wght@500;700;800&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=VT323&family=Press+Start+2P&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+
     <script>
         tailwind.config = {
             theme: {
                 extend: {
-                    colors: {
-                        cream: '#FFFFFF',
-                        darkBg: '#09090b',
-                    },
                     fontFamily: {
-                        sans: ['Space Grotesk', 'sans-serif'],
-                        mono: ['Courier Prime', 'monospace'],
+                        pixel: ['"VT323"', 'monospace'],
+                        retro: ['"Press Start 2P"', 'cursive'],
+                        sans: ['"Space Grotesk"', 'sans-serif'],
                     }
                 }
             }
@@ -31,284 +28,246 @@
     </script>
 
     <style>
-        ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: rgba(0, 0, 0, 0.05);
-        }
-        ::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 999px;
+        body {
+            background-color: #0d0d0e;
+            color: #f4f4f5;
         }
 
-        /* Screen Flash effect */
-        @keyframes flash-animation {
-            0% { opacity: 1; }
-            100% { opacity: 0; }
-        }
-        .flash-overlay {
-            animation: flash-animation 0.4s ease-out forwards;
+        /* Strict B&W filter */
+        .bw-filter {
+            filter: grayscale(100%) contrast(125%) brightness(102%);
         }
 
-        /* Countdown Animation */
-        @keyframes count-bounce {
-            0% { transform: scale(0.5); opacity: 0; }
-            50% { transform: scale(1.2); opacity: 1; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-        .animate-countdown {
-            animation: count-bounce 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) infinite;
-        }
-
-        /* Strictly Black & White Filter */
-        .filter-bw { 
-            filter: grayscale(100%) contrast(130%) brightness(102%); 
-        }
-
-        /* Mirrored Video */
+        /* Mirrored video */
         .mirror {
             transform: scaleX(-1);
         }
 
-        .btn-glow {
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.15);
+        /* Flash animation */
+        @keyframes flash-anim {
+            0% { opacity: 1; }
+            100% { opacity: 0; }
         }
-        .btn-glow:hover {
-            box-shadow: 0 0 25px rgba(255, 255, 255, 0.35);
+        .flash-active {
+            animation: flash-anim 0.35s ease-out forwards;
+        }
+
+        /* Countdown Bounce */
+        @keyframes bounce-scale {
+            0% { transform: scale(0.6); opacity: 0.2; }
+            50% { transform: scale(1.15); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .animate-countdown {
+            animation: bounce-scale 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) infinite;
+        }
+
+        /* Custom Pixel Shadows */
+        .pixel-card-shadow {
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.1);
+        }
+
+        .pixel-border {
+            border: 2px solid #000;
         }
     </style>
 </head>
-<body class="bg-zinc-950 text-zinc-100 font-sans min-h-screen flex flex-col justify-between selection:bg-white selection:text-black">
+<body class="min-h-screen flex flex-col justify-between selection:bg-black selection:text-white antialiased">
 
-    <header class="border-b border-zinc-800 bg-zinc-950/80 backdrop-blur-md sticky top-0 z-40 px-4 py-3.5">
-        <div class="max-w-7xl mx-auto flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <div class="w-9 h-9 rounded-xl bg-white text-black flex items-center justify-center font-bold text-lg shadow-md">
-                    <i class="fa-solid fa-camera"></i>
+    <header class="border-b border-zinc-800 bg-zinc-950/90 backdrop-blur-md sticky top-0 z-40 px-4 py-3">
+        <div class="max-w-5xl mx-auto flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-lg bg-white text-black flex items-center justify-center font-bold text-sm shadow">
+                    <i class="fa-solid fa-camera-retro"></i>
                 </div>
-                <div>
-                    <h1 class="text-lg font-bold tracking-wider uppercase text-white font-mono">
-                        SIDEQUEST.
-                    </h1>
-                    <p class="text-[10px] text-zinc-400 font-mono hidden sm:block">Monochrome 4-Photo Strip Studio</p>
-                </div>
+                <span class="font-pixel text-2xl tracking-widest text-white uppercase">sidequest.</span>
             </div>
-
-            <div class="flex items-center gap-3 text-xs">
-                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-zinc-900 text-zinc-300 border border-zinc-800 font-mono text-[11px]">
+            <div class="flex items-center gap-2">
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-zinc-900 border border-zinc-800 text-xs font-mono text-zinc-300">
                     <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                    B&amp;W CAMERA READY
+                    MONOCHROME 1-SHOT
                 </span>
             </div>
         </div>
     </header>
 
-    <main class="max-w-7xl mx-auto w-full px-4 py-6 flex-1 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+    <main class="flex-1 max-w-5xl w-full mx-auto px-4 py-8 flex flex-col lg:flex-row items-center lg:items-start justify-center gap-8">
         
-        <!-- Camera Section -->
-        <section class="lg:col-span-7 flex flex-col gap-6">
+        <!-- Left Column: Frame Container Preview -->
+        <div class="w-full max-w-[420px] flex flex-col items-center">
             
-            <div class="bg-zinc-900 border border-zinc-800 rounded-3xl p-4 sm:p-6 shadow-2xl relative overflow-hidden">
+            <!-- Exact Social Media / Polaroid White Photocard Frame -->
+            <div id="photocardFrame" class="w-full bg-white text-black p-4 sm:p-5 rounded-sm pixel-card-shadow relative flex flex-col select-none transition-all duration-300">
                 
-                <!-- Flash Overlay -->
-                <div id="flashOverlay" class="absolute inset-0 bg-white z-30 pointer-events-none hidden"></div>
-
-                <div class="flex items-center justify-between mb-3 text-xs text-zinc-400 font-mono px-1">
-                    <div class="flex items-center gap-2">
-                        <i class="fa-solid fa-circle text-red-500 animate-ping text-[8px]"></i>
-                        <span class="uppercase tracking-wider">LIVE STREAM (BLACK &amp; WHITE)</span>
+                <!-- 1. Top Header -->
+                <div class="flex items-start justify-between mb-3 px-1">
+                    <div>
+                        <h2 class="font-pixel text-3xl sm:text-4xl leading-none font-bold text-black tracking-tight">sidequest.</h2>
+                        <p class="font-pixel text-lg sm:text-xl text-zinc-800 leading-tight flex items-center gap-1 mt-0.5">
+                            <span>📍</span> 39a Katibayan, Commonwealth QC
+                        </p>
                     </div>
-                    <button id="toggleMirrorBtn" class="hover:text-white transition flex items-center gap-1.5 bg-zinc-800 px-3 py-1 rounded-lg border border-zinc-700/60">
-                        <i class="fa-solid fa-arrows-rotate text-xs"></i>
-                        <span class="hidden sm:inline">Flip Mirror</span>
-                    </button>
+                    <!-- Three Dots Icon -->
+                    <div class="text-black text-xl py-1 px-1 cursor-pointer hover:opacity-70">
+                        <i class="fa-solid fa-ellipsis-vertical"></i>
+                    </div>
                 </div>
 
-                <!-- Video Display -->
-                <div class="relative aspect-[4/3] w-full bg-black rounded-2xl overflow-hidden border border-zinc-800 flex items-center justify-center shadow-inner">
+                <!-- 2. Inner Photo Frame / Live Feed Area -->
+                <div class="relative w-full aspect-square bg-zinc-100 border-2 border-zinc-200 overflow-hidden shadow-inner flex items-center justify-center">
                     
-                    <video id="webcam" autoplay playsinline class="w-full h-full object-cover mirror filter-bw transition-all duration-300"></video>
-                    <canvas id="captureCanvas" class="hidden"></canvas>
+                    <!-- Flash Effect Canvas -->
+                    <div id="flashOverlay" class="absolute inset-0 bg-white z-30 pointer-events-none hidden"></div>
 
-                    <!-- Countdown Display Overlay -->
-                    <div id="countdownOverlay" class="absolute inset-0 bg-black/75 backdrop-blur-xs flex flex-col items-center justify-center z-20 hidden">
-                        <span id="countdownNumber" class="text-8xl sm:text-9xl font-extrabold text-white font-mono animate-countdown drop-shadow-[0_0_30px_rgba(255,255,255,0.6)]">5</span>
-                        <p id="countdownStepText" class="text-zinc-300 font-mono text-xs uppercase tracking-widest mt-4 bg-zinc-900/90 px-4 py-1.5 rounded-full border border-zinc-700">Photo 1 of 4</p>
-                    </div>
-
-                    <!-- Shot Indicator Overlay -->
-                    <div id="captureProgressContainer" class="absolute bottom-4 left-4 right-4 z-10 flex gap-2 justify-center hidden">
-                        <div class="shot-indicator w-12 h-2 rounded-full bg-white/20 border border-white/30 backdrop-blur-sm transition-all duration-300"></div>
-                        <div class="shot-indicator w-12 h-2 rounded-full bg-white/20 border border-white/30 backdrop-blur-sm transition-all duration-300"></div>
-                        <div class="shot-indicator w-12 h-2 rounded-full bg-white/20 border border-white/30 backdrop-blur-sm transition-all duration-300"></div>
-                        <div class="shot-indicator w-12 h-2 rounded-full bg-white/20 border border-white/30 backdrop-blur-sm transition-all duration-300"></div>
-                    </div>
-
-                    <!-- Camera Access Error Screen -->
-                    <div id="cameraError" class="absolute inset-0 bg-zinc-900 flex flex-col items-center justify-center p-6 text-center hidden z-10">
-                        <i class="fa-solid fa-camera-slash text-4xl text-zinc-500 mb-3"></i>
-                        <h3 class="font-semibold text-base text-zinc-200">Camera Access Required</h3>
-                        <p class="text-xs text-zinc-400 max-w-sm mt-1 mb-4">Please grant camera permissions to capture photo strips.</p>
-                        <button id="retryCameraBtn" class="px-4 py-2 bg-white text-black hover:bg-zinc-200 rounded-xl text-xs font-bold transition uppercase font-mono">
-                            Allow Camera Access
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Sequence Start Trigger -->
-                <div class="mt-5">
-                    <button id="startCaptureBtn" class="w-full py-4 px-6 rounded-2xl bg-white text-black font-bold text-base tracking-wider uppercase font-mono shadow-xl btn-glow hover:bg-zinc-200 active:scale-[0.99] transition flex items-center justify-center gap-3">
-                        <i class="fa-solid fa-camera text-lg"></i>
-                        <span>Start Photo Sequence (5s Timer)</span>
-                    </button>
-                </div>
-            </div>
-        </section>
-
-        <!-- Right Section: Pure White Photo Strip Preview -->
-        <section class="lg:col-span-5 flex flex-col gap-6">
-            
-            <div class="bg-zinc-900 border border-zinc-800 rounded-3xl p-6 shadow-2xl flex flex-col items-center">
-                
-                <div class="w-full flex items-center justify-between mb-4 border-b border-zinc-800 pb-3">
-                    <h2 class="text-xs font-bold text-zinc-300 uppercase tracking-widest font-mono flex items-center gap-2">
-                        <i class="fa-solid fa-file-image text-white"></i> Photo Strip
-                    </h2>
-                    <span class="text-[10px] font-mono text-zinc-500">WHITE / B&amp;W</span>
-                </div>
-
-                <!-- 2x6 Plain White Photobooth Strip Preview -->
-                <div class="relative max-w-[260px] sm:max-w-[280px] w-full shadow-2xl rounded-sm transition-all duration-300" id="stripWrapper">
+                    <!-- Live Video Element -->
+                    <video id="webcam" autoplay playsinline class="w-full h-full object-cover bw-filter mirror"></video>
                     
-                    <div id="photostripContainer" class="w-full p-4 bg-white text-black flex flex-col items-center shadow-xl relative min-h-[580px]">
-                        
-                        <!-- 4 Vertical Photo Frame Grid -->
-                        <div class="w-full flex flex-col gap-3 flex-1" id="framesContainer">
-                            
-                            <!-- Frame 1 -->
-                            <div class="frame-box aspect-[4/3] bg-zinc-100 overflow-hidden relative flex items-center justify-center border border-zinc-300">
-                                <img class="captured-img w-full h-full object-cover hidden" alt="Frame 1">
-                                <div class="frame-placeholder flex flex-col items-center gap-1 text-zinc-400">
-                                    <i class="fa-regular fa-image text-xl"></i>
-                                    <span class="text-[10px] font-mono">SHOT 1</span>
-                                </div>
-                            </div>
+                    <!-- Captured Snapshot Overlay Canvas (Hidden by default) -->
+                    <canvas id="photoCanvas" class="w-full h-full object-cover hidden bw-filter"></canvas>
 
-                            <!-- Frame 2 -->
-                            <div class="frame-box aspect-[4/3] bg-zinc-100 overflow-hidden relative flex items-center justify-center border border-zinc-300">
-                                <img class="captured-img w-full h-full object-cover hidden" alt="Frame 2">
-                                <div class="frame-placeholder flex flex-col items-center gap-1 text-zinc-400">
-                                    <i class="fa-regular fa-image text-xl"></i>
-                                    <span class="text-[10px] font-mono">SHOT 2</span>
-                                </div>
-                            </div>
+                    <!-- Countdown Timer Display -->
+                    <div id="timerOverlay" class="absolute inset-0 bg-black/60 backdrop-blur-[2px] flex flex-col items-center justify-center z-20 hidden">
+                        <span id="countdownNumber" class="font-pixel text-9xl text-white animate-countdown drop-shadow-[0_0_20px_rgba(255,255,255,0.8)]">5</span>
+                        <span class="font-pixel text-xl text-zinc-300 uppercase tracking-widest mt-2 bg-black/70 px-3 py-1 rounded border border-zinc-700">Get Ready!</span>
+                    </div>
 
-                            <!-- Frame 3 -->
-                            <div class="frame-box aspect-[4/3] bg-zinc-100 overflow-hidden relative flex items-center justify-center border border-zinc-300">
-                                <img class="captured-img w-full h-full object-cover hidden" alt="Frame 3">
-                                <div class="frame-placeholder flex flex-col items-center gap-1 text-zinc-400">
-                                    <i class="fa-regular fa-image text-xl"></i>
-                                    <span class="text-[10px] font-mono">SHOT 3</span>
-                                </div>
-                            </div>
-
-                            <!-- Frame 4 -->
-                            <div class="frame-box aspect-[4/3] bg-zinc-100 overflow-hidden relative flex items-center justify-center border border-zinc-300">
-                                <img class="captured-img w-full h-full object-cover hidden" alt="Frame 4">
-                                <div class="frame-placeholder flex flex-col items-center gap-1 text-zinc-400">
-                                    <i class="fa-regular fa-image text-xl"></i>
-                                    <span class="text-[10px] font-mono">SHOT 4</span>
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <!-- Footer Branding & Dynamic Device Date (Bottom Positioned) -->
-                        <div class="mt-4 mb-2 text-center w-full px-2 pt-2 border-t border-zinc-200">
-                            <h3 id="displayTitle" class="font-sans text-lg font-extrabold uppercase tracking-widest leading-none text-black">
-                                SIDEQUEST.
-                            </h3>
-                            <p id="displayDate" class="text-[11px] font-mono font-bold tracking-widest mt-1 text-zinc-700 uppercase">
-                                -- -- ----
-                            </p>
-                        </div>
-
+                    <!-- Camera Error Notice -->
+                    <div id="cameraError" class="absolute inset-0 bg-zinc-900 text-white flex flex-col items-center justify-center p-6 text-center hidden z-10">
+                        <i class="fa-solid fa-camera-slash text-3xl text-zinc-500 mb-2"></i>
+                        <p class="font-pixel text-xl">Camera Access Blocked</p>
+                        <p class="text-xs text-zinc-400 mt-1 mb-4">Please allow camera permissions to take a photocard.</p>
+                        <button id="retryCameraBtn" class="px-4 py-2 bg-white text-black font-pixel text-lg uppercase tracking-wider hover:bg-zinc-200">
+                            Grant Access
+                        </button>
                     </div>
                 </div>
 
-                <!-- Action Controls -->
-                <div class="w-full mt-6 space-y-2.5 font-mono">
-                    <button id="downloadBtn" disabled class="w-full py-3 px-4 rounded-xl bg-white hover:bg-zinc-200 disabled:bg-zinc-800 disabled:text-zinc-600 disabled:cursor-not-allowed text-black font-bold text-xs uppercase tracking-wider transition flex items-center justify-center gap-2 shadow-lg">
-                        <i class="fa-solid fa-download"></i>
-                        <span>Download Strip (PNG)</span>
-                    </button>
-
-                    <div class="grid grid-cols-2 gap-2">
-                        <button id="printBtn" disabled class="py-2.5 px-3 rounded-xl bg-black border border-zinc-800 hover:bg-zinc-850 disabled:opacity-40 disabled:cursor-not-allowed text-zinc-200 font-medium text-xs transition flex items-center justify-center gap-2">
-                            <i class="fa-solid fa-print"></i>
-                            <span>Print Strip</span>
+                <!-- 3. Social Action Bar Icons -->
+                <div class="flex items-center justify-between mt-3 px-1">
+                    <div class="flex items-center gap-3 sm:gap-4">
+                        <!-- Filled Red Heart -->
+                        <button class="text-red-600 text-2xl hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-heart"></i>
                         </button>
-                        <button id="resetBtn" class="py-2.5 px-3 rounded-xl bg-black border border-zinc-800 hover:bg-zinc-850 text-zinc-300 font-medium text-xs transition flex items-center justify-center gap-2">
-                            <i class="fa-solid fa-rotate-left"></i>
-                            <span>Re-take All</span>
+                        <!-- Speech Bubble Outline -->
+                        <button class="text-black text-2xl hover:opacity-70 transition-opacity">
+                            <i class="fa-regular fa-comment"></i>
+                        </button>
+                        <!-- Share / Paper Plane Outline -->
+                        <button class="text-black text-2xl hover:opacity-70 transition-opacity">
+                            <i class="fa-regular fa-paper-plane"></i>
                         </button>
                     </div>
+
+                    <!-- Paginated Dots (Active blue dot + gray dots) -->
+                    <div class="flex items-center gap-1.5">
+                        <span class="w-2 h-2 rounded-full bg-sky-500"></span>
+                        <span class="w-1.5 h-1.5 rounded-full bg-zinc-400"></span>
+                        <span class="w-1.5 h-1.5 rounded-full bg-zinc-400"></span>
+                        <span class="w-1.5 h-1.5 rounded-full bg-zinc-400"></span>
+                        <span class="w-1.5 h-1.5 rounded-full bg-zinc-400"></span>
+                        <span class="w-1.5 h-1.5 rounded-full bg-zinc-400"></span>
+                    </div>
+
+                    <!-- Bookmark Icon Outline -->
+                    <div>
+                        <button class="text-black text-2xl hover:opacity-70 transition-opacity">
+                            <i class="fa-regular fa-bookmark"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 4. Bottom Centered Text Area -->
+                <div class="mt-4 mb-2 text-center flex flex-col items-center justify-center font-pixel text-lg sm:text-xl text-black leading-tight tracking-tight">
+                    <p>Main quest: survive the day.</p>
+                    <p class="mt-0.5">Side quest: iced coffee.</p>
                 </div>
 
             </div>
+        </div>
 
-        </section>
+        <!-- Right Column: Control Dashboard -->
+        <div class="w-full max-w-[380px] bg-zinc-900 border border-zinc-800 rounded-2xl p-6 flex flex-col gap-5 shadow-2xl">
+            <div>
+                <h3 class="font-pixel text-2xl text-white uppercase tracking-wider flex items-center gap-2">
+                    <i class="fa-solid fa-sliders text-sm text-zinc-400"></i> Controls
+                </h3>
+                <p class="text-xs text-zinc-400 mt-0.5">Click take photo to initiate the 5s timer.</p>
+            </div>
+
+            <!-- Quick Settings -->
+            <div class="space-y-3 font-mono text-xs">
+                <div class="flex items-center justify-between p-3 rounded-xl bg-zinc-950 border border-zinc-800">
+                    <span class="text-zinc-300">Filter</span>
+                    <span class="font-bold text-white bg-zinc-800 px-2 py-0.5 rounded text-[11px]">B&amp;W MONOCHROME</span>
+                </div>
+                <div class="flex items-center justify-between p-3 rounded-xl bg-zinc-950 border border-zinc-800">
+                    <span class="text-zinc-300">Mirror Feed</span>
+                    <button id="toggleMirrorBtn" class="text-xs text-white hover:text-zinc-300 bg-zinc-800 px-2.5 py-1 rounded transition border border-zinc-700">
+                        <i class="fa-solid fa-arrows-rotate mr-1"></i> Flip Camera
+                    </button>
+                </div>
+            </div>
+
+            <!-- Main Actions -->
+            <div class="space-y-3 pt-2">
+                <button id="snapBtn" class="w-full py-4 px-4 bg-white text-black font-pixel text-2xl uppercase tracking-wider rounded-xl shadow-lg hover:bg-zinc-200 active:scale-[0.98] transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-camera"></i>
+                    <span>Take Photo (5s)</span>
+                </button>
+
+                <div class="grid grid-cols-2 gap-2">
+                    <button id="retakeBtn" disabled class="py-3 px-3 bg-zinc-800 text-zinc-400 font-pixel text-xl uppercase tracking-wider rounded-xl border border-zinc-700/60 disabled:opacity-40 disabled:cursor-not-allowed hover:enabled:bg-zinc-700 hover:enabled:text-white transition flex items-center justify-center gap-1.5">
+                        <i class="fa-solid fa-rotate-left text-sm"></i>
+                        <span>Retake</span>
+                    </button>
+                    <button id="downloadBtn" disabled class="py-3 px-3 bg-white text-black font-pixel text-xl uppercase tracking-wider rounded-xl border border-white disabled:opacity-30 disabled:cursor-not-allowed hover:enabled:bg-zinc-200 transition flex items-center justify-center gap-1.5 shadow">
+                        <i class="fa-solid fa-download text-sm"></i>
+                        <span>Download</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Photocard Info Banner -->
+            <div class="p-3 bg-zinc-950/80 rounded-xl border border-zinc-800 text-[11px] text-zinc-400 font-mono leading-relaxed">
+                <i class="fa-solid fa-circle-info text-zinc-500 mr-1"></i>
+                Downloads render at high resolution (1200×1500px) including all icons, location details, and monochrome photo.
+            </div>
+        </div>
+
     </main>
 
-    <!-- Footer -->
-    <footer class="border-t border-zinc-900 py-4 px-4 text-center text-xs text-zinc-600 font-mono">
-        <p>SIDEQUEST. &bull; Dynamic Monochrome Photo Booth</p>
+    <footer class="border-t border-zinc-900 py-4 px-4 text-center font-pixel text-lg text-zinc-500">
+        sidequest. &bull; 39a Katibayan, Commonwealth QC
     </footer>
 
+    <!-- Hidden Composite Canvas for Generating High-Res Output -->
+    <canvas id="compositeCanvas" class="hidden"></canvas>
+
     <script>
+        // State variables
         const state = {
             isMirrored: true,
-            capturedImages: [],
             isCapturing: false,
+            hasPhoto: false,
             cameraStream: null
         };
 
-        // Elements
+        // DOM References
         const webcam = document.getElementById('webcam');
-        const captureCanvas = document.getElementById('captureCanvas');
-        const flashOverlay = document.getElementById('flashOverlay');
-        const countdownOverlay = document.getElementById('countdownOverlay');
+        const photoCanvas = document.getElementById('photoCanvas');
+        const timerOverlay = document.getElementById('timerOverlay');
         const countdownNumber = document.getElementById('countdownNumber');
-        const countdownStepText = document.getElementById('countdownStepText');
-        const captureProgressContainer = document.getElementById('captureProgressContainer');
-        const shotIndicators = document.querySelectorAll('.shot-indicator');
+        const flashOverlay = document.getElementById('flashOverlay');
         const cameraError = document.getElementById('cameraError');
         const retryCameraBtn = document.getElementById('retryCameraBtn');
-        const toggleMirrorBtn = document.getElementById('toggleMirrorBtn');
-        const startCaptureBtn = document.getElementById('startCaptureBtn');
-
-        const displayTitle = document.getElementById('displayTitle');
-        const displayDate = document.getElementById('displayDate');
-
-        const frameBoxes = document.querySelectorAll('.frame-box');
+        
+        const snapBtn = document.getElementById('snapBtn');
+        const retakeBtn = document.getElementById('retakeBtn');
         const downloadBtn = document.getElementById('downloadBtn');
-        const printBtn = document.getElementById('printBtn');
-        const resetBtn = document.getElementById('resetBtn');
+        const toggleMirrorBtn = document.getElementById('toggleMirrorBtn');
 
-        // Dynamic Device Date Formatting
-        function getFormattedDeviceDate() {
-            const now = new Date();
-            const options = { month: 'long', day: 'numeric', year: 'numeric' };
-            return now.toLocaleDateString('en-US', options).toUpperCase();
-        }
-
-        function updateDateDisplay() {
-            displayDate.textContent = getFormattedDeviceDate();
-        }
-
-        // Web Audio Synthesizer Beeps
+        // Audio Beep Generator using Web Audio API
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
         function playBeep(freq = 600, duration = 0.08) {
@@ -338,11 +297,9 @@
                 }
                 const whiteNoise = audioCtx.createBufferSource();
                 whiteNoise.buffer = buffer;
-
                 const filter = audioCtx.createBiquadFilter();
                 filter.type = 'highpass';
                 filter.frequency.value = 1000;
-
                 const gain = audioCtx.createGain();
                 gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
                 gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.08);
@@ -350,7 +307,6 @@
                 whiteNoise.connect(filter);
                 filter.connect(gain);
                 gain.connect(audioCtx.destination);
-
                 whiteNoise.start();
             } catch (e) {}
         }
@@ -359,134 +315,122 @@
         async function initCamera() {
             try {
                 cameraError.classList.add('hidden');
-                const constraints = {
+                const stream = await navigator.mediaDevices.getUserMedia({
                     video: {
-                        width: { ideal: 1280 },
-                        height: { ideal: 960 },
-                        facingMode: 'user'
+                        width: { ideal: 1080 },
+                        height: { ideal: 1080 },
+                        facingMode: "user",
+                        aspectRatio: 1
                     },
                     audio: false
-                };
-                state.cameraStream = await navigator.mediaDevices.getUserMedia(constraints);
-                webcam.srcObject = state.cameraStream;
+                });
+                state.cameraStream = stream;
+                webcam.srcObject = stream;
             } catch (err) {
                 console.error("Camera access error:", err);
                 cameraError.classList.remove('hidden');
             }
         }
 
+        // Flip Camera Mirror Toggle
         toggleMirrorBtn.addEventListener('click', () => {
             state.isMirrored = !state.isMirrored;
             if (state.isMirrored) {
                 webcam.classList.add('mirror');
+                photoCanvas.classList.add('mirror');
             } else {
                 webcam.classList.remove('mirror');
+                photoCanvas.classList.remove('mirror');
             }
         });
 
         retryCameraBtn.addEventListener('click', initCamera);
 
-        // Sequence trigger
-        startCaptureBtn.addEventListener('click', async () => {
+        // Take Photo Click Handler
+        snapBtn.addEventListener('click', async () => {
             if (state.isCapturing) return;
 
             state.isCapturing = true;
-            state.capturedImages = [];
-            startCaptureBtn.disabled = true;
-            startCaptureBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            snapBtn.disabled = true;
+            snapBtn.classList.add('opacity-50', 'cursor-not-allowed');
 
-            captureProgressContainer.classList.remove('hidden');
-            shotIndicators.forEach(ind => ind.className = 'shot-indicator w-12 h-2 rounded-full bg-white/20 border border-white/30 backdrop-blur-sm transition-all duration-300');
+            // Start 5 Second Countdown
+            timerOverlay.classList.remove('hidden');
+            let count = 5;
+            countdownNumber.textContent = count;
+            playBeep(600, 0.1);
 
-            frameBoxes.forEach(box => {
-                const img = box.querySelector('.captured-img');
-                const placeholder = box.querySelector('.frame-placeholder');
-                img.src = '';
-                img.classList.add('hidden');
-                placeholder.classList.remove('hidden');
-            });
-
-            for (let shotIndex = 0; shotIndex < 4; shotIndex++) {
-                shotIndicators[shotIndex].className = 'shot-indicator w-12 h-2 rounded-full bg-white shadow-[0_0_10px_rgba(255,255,255,0.8)] backdrop-blur-sm transition-all duration-300';
-                
-                await runCountdown(shotIndex + 1);
-                captureFrame(shotIndex);
-            }
-
-            countdownOverlay.classList.add('hidden');
-            captureProgressContainer.classList.add('hidden');
-            state.isCapturing = false;
-            startCaptureBtn.disabled = false;
-            startCaptureBtn.classList.remove('opacity-50', 'cursor-not-allowed');
-
-            downloadBtn.disabled = false;
-            printBtn.disabled = false;
+            const timer = setInterval(() => {
+                count--;
+                if (count > 0) {
+                    countdownNumber.textContent = count;
+                    countdownNumber.classList.remove('animate-countdown');
+                    void countdownNumber.offsetWidth;
+                    countdownNumber.classList.add('animate-countdown');
+                    playBeep(600, 0.1);
+                } else {
+                    clearInterval(timer);
+                    playBeep(900, 0.2);
+                    timerOverlay.classList.add('hidden');
+                    capturePhoto();
+                }
+            }, 1000);
         });
 
-        function runCountdown(shotNum) {
-            return new Promise((resolve) => {
-                countdownOverlay.classList.remove('hidden');
-                countdownStepText.textContent = `Photo ${shotNum} of 4`;
-                let count = 5;
-                countdownNumber.textContent = count;
-                playBeep(600, 0.1);
-
-                const timer = setInterval(() => {
-                    count--;
-                    if (count > 0) {
-                        countdownNumber.textContent = count;
-                        countdownNumber.classList.remove('animate-countdown');
-                        void countdownNumber.offsetWidth;
-                        countdownNumber.classList.add('animate-countdown');
-                        playBeep(600, 0.1);
-                    } else {
-                        clearInterval(timer);
-                        playBeep(900, 0.2);
-                        resolve();
-                    }
-                }, 1000);
-            });
-        }
-
-        // High contrast Black & White capture frame
-        function captureFrame(index) {
+        // Capture Frame and apply B&W Filter
+        function capturePhoto() {
             playShutterSound();
-            
-            flashOverlay.classList.remove('hidden');
-            setTimeout(() => flashOverlay.classList.add('hidden'), 400);
 
-            captureCanvas.width = webcam.videoWidth || 1280;
-            captureCanvas.height = webcam.videoHeight || 960;
-            const ctx = captureCanvas.getContext('2d');
+            // Screen Flash Effect
+            flashOverlay.classList.remove('hidden');
+            flashOverlay.classList.add('flash-active');
+            setTimeout(() => {
+                flashOverlay.classList.add('hidden');
+                flashOverlay.classList.remove('flash-active');
+            }, 350);
+
+            const videoWidth = webcam.videoWidth || 1080;
+            const videoHeight = webcam.videoHeight || 1080;
+
+            // Crop square from video center
+            const size = Math.min(videoWidth, videoHeight);
+            const startX = (videoWidth - size) / 2;
+            const startY = (videoHeight - size) / 2;
+
+            photoCanvas.width = size;
+            photoCanvas.height = size;
+            const ctx = photoCanvas.getContext('2d');
 
             ctx.save();
             if (state.isMirrored) {
-                ctx.translate(captureCanvas.width, 0);
+                ctx.translate(size, 0);
                 ctx.scale(-1, 1);
             }
 
-            ctx.drawImage(webcam, 0, 0, captureCanvas.width, captureCanvas.height);
+            ctx.drawImage(webcam, startX, startY, size, size, 0, 0, size, size);
             ctx.restore();
 
-            applyBWFilter(ctx, captureCanvas.width, captureCanvas.height);
+            // Apply Black and White grayscale conversion
+            applyBWFilter(ctx, size, size);
 
-            const imageDataUrl = captureCanvas.toDataURL('image/jpeg', 0.95);
-            state.capturedImages.push(imageDataUrl);
+            // Toggle view to static canvas
+            webcam.classList.add('hidden');
+            photoCanvas.classList.remove('hidden');
 
-            const frameBox = frameBoxes[index];
-            const imgEl = frameBox.querySelector('.captured-img');
-            const placeholderEl = frameBox.querySelector('.frame-placeholder');
+            state.isCapturing = false;
+            state.hasPhoto = true;
 
-            imgEl.src = imageDataUrl;
-            imgEl.classList.remove('hidden');
-            placeholderEl.classList.add('hidden');
+            // Enable Retake and Download
+            retakeBtn.disabled = false;
+            downloadBtn.disabled = false;
+            snapBtn.classList.add('hidden');
         }
 
+        // Convert canvas image data to high-contrast B&W
         function applyBWFilter(ctx, width, height) {
             const imgData = ctx.getImageData(0, 0, width, height);
             const data = imgData.data;
-
-            const contrast = 35;
+            const contrast = 30;
             const factor = (259 * (contrast + 255)) / (255 * (259 - contrast));
 
             for (let i = 0; i < data.length; i += 4) {
@@ -501,144 +445,139 @@
             ctx.putImageData(imgData, 0, 0);
         }
 
-        // Retake/Reset
-        resetBtn.addEventListener('click', () => {
-            state.capturedImages = [];
-            frameBoxes.forEach(box => {
-                const img = box.querySelector('.captured-img');
-                const placeholder = box.querySelector('.frame-placeholder');
-                img.src = '';
-                img.classList.add('hidden');
-                placeholder.classList.remove('hidden');
-            });
+        // Retake Photo Logic
+        retakeBtn.addEventListener('click', () => {
+            state.hasPhoto = false;
+            photoCanvas.classList.add('hidden');
+            webcam.classList.remove('hidden');
+
+            snapBtn.classList.remove('hidden');
+            snapBtn.disabled = false;
+            snapBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+
+            retakeBtn.disabled = true;
             downloadBtn.disabled = true;
-            printBtn.disabled = true;
         });
 
-        // High-res Strip Canvas Render (Top to Bottom: 4 Photos then Bottom Footer)
-        function generateHighResStrip() {
-            return new Promise((resolve) => {
-                const canvas = document.createElement('canvas');
-                canvas.width = 600;
-                canvas.height = 1800;
-                const ctx = canvas.getContext('2d');
+        // Render Full Photocard (Photo + Header + Icons + Text) to Canvas
+        async function generateHighResPhotocard() {
+            const compCanvas = document.getElementById('compositeCanvas');
+            const width = 1200;
+            const height = 1500;
+            compCanvas.width = width;
+            compCanvas.height = height;
 
-                // 1. Plain White Strip Background
-                ctx.fillStyle = '#FFFFFF';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
+            const ctx = compCanvas.getContext('2d');
 
-                const topOffset = 45;
-                const padding = 45;
-                const frameGap = 20;
-                const availableWidth = canvas.width - (padding * 2); // 510px
-                const frameHeight = (availableWidth / 4) * 3; // 382.5px
+            // 1. White Frame Background
+            ctx.fillStyle = '#FFFFFF';
+            ctx.fillRect(0, 0, width, height);
 
-                let loadedCount = 0;
-                const imgObjs = [];
+            // Wait for custom VT323 font load if needed
+            await document.fonts.load('30px "VT323"');
 
-                if (state.capturedImages.length === 0) {
-                    resolve(canvas.toDataURL('image/png'));
-                    return;
-                }
+            // 2. Header Text
+            ctx.fillStyle = '#000000';
+            ctx.textAlign = 'left';
+            
+            // "sidequest." Title
+            ctx.font = 'bold 110px "VT323", monospace';
+            ctx.fillText('sidequest.', 60, 130);
 
-                state.capturedImages.forEach((dataUrl, index) => {
-                    const img = new Image();
-                    img.onload = () => {
-                        loadedCount++;
-                        imgObjs[index] = img;
+            // Location Text with Pin Icon
+            ctx.font = '55px "VT323", monospace';
+            ctx.fillStyle = '#18181b';
+            ctx.fillText('📍 39a Katibayan, Commonwealth QC', 60, 195);
 
-                        if (loadedCount === state.capturedImages.length) {
-                            // Render 4 Photos vertically
-                            for (let i = 0; i < 4; i++) {
-                                const y = topOffset + i * (frameHeight + frameGap);
-                                if (imgObjs[i]) {
-                                    ctx.drawImage(imgObjs[i], padding, y, availableWidth, frameHeight);
-                                    
-                                    // Fine border outline around frame
-                                    ctx.strokeStyle = 'rgba(0,0,0,0.15)';
-                                    ctx.lineWidth = 2;
-                                    ctx.strokeRect(padding, y, availableWidth, frameHeight);
-                                }
-                            }
+            // Three dots icon on top right
+            ctx.textAlign = 'right';
+            ctx.font = 'bold 70px sans-serif';
+            ctx.fillText('⋮', width - 60, 135);
 
-                            // Render Footer Watermark AT THE BOTTOM
-                            const footerY = topOffset + 4 * (frameHeight + frameGap) + 40;
-                            
-                            // Separator Line
-                            ctx.beginPath();
-                            ctx.moveTo(padding, footerY - 25);
-                            ctx.lineTo(canvas.width - padding, footerY - 25);
-                            ctx.strokeStyle = '#e4e4e7';
-                            ctx.lineWidth = 2;
-                            ctx.stroke();
+            // 3. Main Photo Square Frame
+            const photoX = 60;
+            const photoY = 230;
+            const photoSize = width - (60 * 2); // 1080px
 
-                            ctx.fillStyle = '#000000';
-                            ctx.textAlign = 'center';
-                            
-                            // Title
-                            ctx.font = '800 36px "Space Grotesk", sans-serif';
-                            ctx.fillText('sidequest.', canvas.width / 2, footerY + 15);
+            if (state.hasPhoto) {
+                ctx.drawImage(photoCanvas, photoX, photoY, photoSize, photoSize);
+            } else {
+                ctx.fillStyle = '#f4f4f5';
+                ctx.fillRect(photoX, photoY, photoSize, photoSize);
+            }
 
-                            // Dynamic Date
-                            ctx.font = 'bold 20px "Courier Prime", monospace';
-                            ctx.fillStyle = '#3f3f46';
-                            ctx.fillText(getFormattedDeviceDate(), canvas.width / 2, footerY + 50);
+            // Photo Border Outline
+            ctx.strokeStyle = '#e4e4e7';
+            ctx.lineWidth = 4;
+            ctx.strokeRect(photoX, photoY, photoSize, photoSize);
 
-                            resolve(canvas.toDataURL('image/png'));
-                        }
-                    };
-                    img.src = dataUrl;
-                });
+            // 4. Social Action Icons Area (Y: ~1330)
+            const iconY = photoY + photoSize + 60;
+
+            // Heart Icon (Filled Red)
+            ctx.fillStyle = '#dc2626';
+            ctx.font = 'bold 48px "Font Awesome 6 Free"';
+            ctx.textAlign = 'left';
+            ctx.fillText('\uf004', photoX, iconY); // Heart unicode
+
+            // Comment Icon (Outline)
+            ctx.fillStyle = '#000000';
+            ctx.font = '48px "Font Awesome 6 Free"';
+            ctx.fillText('\uf075', photoX + 75, iconY);
+
+            // Paper Plane / Share Icon
+            ctx.fillText('\uf1d8', photoX + 150, iconY);
+
+            // Paginated Dots
+            const dotCenterX = width / 2;
+            const dotY = iconY - 15;
+            
+            // Blue Active Dot
+            ctx.fillStyle = '#0ea5e9';
+            ctx.beginPath();
+            ctx.arc(dotCenterX - 45, dotY, 10, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Gray Inactive Dots
+            ctx.fillStyle = '#a1a1aa';
+            const dotOffsets = [-20, 5, 30, 55, 80];
+            dotOffsets.forEach(offset => {
+                ctx.beginPath();
+                ctx.arc(dotCenterX + offset, dotY, 7, 0, Math.PI * 2);
+                ctx.fill();
             });
+
+            // Bookmark Icon (Right Aligned)
+            ctx.textAlign = 'right';
+            ctx.fillStyle = '#000000';
+            ctx.font = '48px "Font Awesome 6 Free"';
+            ctx.fillText('\uf02e', width - photoX, iconY);
+
+            // 5. Bottom Centered Text
+            const textCenterY = iconY + 65;
+            ctx.textAlign = 'center';
+            ctx.font = '55px "VT323", monospace';
+            ctx.fillStyle = '#000000';
+            
+            ctx.fillText('Main quest: survive the day.', width / 2, textCenterY);
+            ctx.fillText('Side quest: iced coffee.', width / 2, textCenterY + 55);
+
+            return compCanvas.toDataURL('image/png');
         }
 
-        // Export Actions
+        // Download Button Click Event
         downloadBtn.addEventListener('click', async () => {
-            const dataUrl = await generateHighResStrip();
+            const dataUrl = await generateHighResPhotocard();
             const link = document.createElement('a');
-            link.download = `SIDE-QUEST-strip-${Date.now()}.png`;
+            link.download = `sidequest-photocard-${Date.now()}.png`;
             link.href = dataUrl;
+            document.body.appendChild(link);
             link.click();
+            document.body.removeChild(link);
         });
 
-        printBtn.addEventListener('click', async () => {
-            const dataUrl = await generateHighResStrip();
-            const printWindow = window.open('', '_blank');
-            printWindow.document.write(`
-                <!DOCTYPE html>
-                <html>
-                <head>
-                    <title>Print SIDEQUEST. Strip</title>
-                    <style>
-                        body {
-                            margin: 0;
-                            display: flex;
-                            justify-content: center;
-                            align-items: center;
-                            min-height: 100vh;
-                            background: #111;
-                        }
-                        img {
-                            max-height: 95vh;
-                            box-shadow: 0 0 20px rgba(0,0,0,0.5);
-                        }
-                        @media print {
-                            body { background: none; }
-                            img { max-height: 100%; width: 2in; height: 6in; }
-                        }
-                    </style>
-                </head>
-                <body>
-                    <img src="${dataUrl}" onload="window.print();">
-                </body>
-                </html>
-            `);
-            printWindow.document.close();
-        });
-
-        // Initialize App
+        // Initialize Camera on window load
         window.addEventListener('load', () => {
-            updateDateDisplay();
             initCamera();
         });
     </script>
